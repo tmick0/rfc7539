@@ -19,9 +19,9 @@ all: $(TARGETS)
 	./$<;							\
 	rc=$$?;							\
 	if [ $$rc != 0 ]; then					\
-		echo ! $< failed \($$rc\);			\
+		echo ! $< failed with code $$rc. :\(;		\
 	else							\
-		echo ! $< ok;					\
+		echo ! $< passed. :\);				\
 	fi;
 	
 run: $(TESTRUN)
