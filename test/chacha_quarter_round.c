@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
         
         chacha_quarter_round(s, d);
         
-        for(i = 0; i < 16; i++){
+        for(i = 0; i < CHACHA_STATE_SIZE; i++){
                 if(s[i] != t[i])
                         return 1;
         }
