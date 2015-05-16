@@ -1,6 +1,6 @@
 CC=gcc
 AR=ar
-CCFLAGS=-Wall -Werror -g
+CCFLAGS=-Wall -Werror -g -O3
 TARGET=../rfc7539.a
 
 SOURCES=$(wildcard *.c)
