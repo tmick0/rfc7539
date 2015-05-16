@@ -1,5 +1,5 @@
 
-.PHONY: all test clean
+.PHONY: all test clean rfc7539.a
 
 all: rfc7539.a
 
