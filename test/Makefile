@@ -14,17 +14,18 @@ all: $(TARGETS)
 	$(CC) $(CCFLAGS) -o $@ $< $(LDFLAGS)
 	
 %.test: %
-	@echo ! Testing $<...; 					\
+	@echo;							\
+	echo ! Testing $<...; 					\
 	./$<;							\
 	rc=$$?;							\
 	if [ $$rc != 0 ]; then					\
 		echo ! $< failed \($$rc\);			\
-		exit $$rc;					\
 	else							\
 		echo ! $< ok;					\
-	fi;							\
+	fi;
 	
 run: $(TESTRUN)
+	@echo;
 	
 clean:
 	rm -f $(TARGETS) 
