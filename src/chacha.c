@@ -2,7 +2,6 @@
 
 #include <string.h>
 #include <endian.h>
-#include <stdio.h>
 
 static const chacha_round_def CHACHA_ROUND_DEFS[8] = {
         {0, 4,  8, 12},
