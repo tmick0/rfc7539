@@ -1,6 +1,8 @@
 #include "chacha.h"
 
 #include <string.h>
+#include <endian.h>
+#include <stdio.h>
 
 static const chacha_round_def CHACHA_ROUND_DEFS[8] = {
         {0, 4,  8, 12},
@@ -70,4 +72,41 @@ void chacha_block(chacha_state s){
                 s[i] += t[i];
         }
 
+}
+
+void chacha_encrypt(uint32_t counter, const unsigned char key[32], const unsigned char iv[12], const unsigned char *input, unsigned char *output, size_t len){
+        uint32_t i, j;
+        chacha_key key_32;
+        chacha_nonce iv_32;
+        
+        /* fix endianness of input key */
+        for(i = 0; i < 8; i++){
+                key_32[i] = htole32(((const uint32_t *) key)[i]);
+        }
+        
+        /* fix endianness of input iv */
+        for(i = 0; i < 3; i++){
+                iv_32[i] = htole32(((const uint32_t *) iv)[i]);
+        }
+        
+        /* process each block */
+        for(i = 0; i < len; i+=64){
+                uint32_t b_len = (i/64 == len/64) ? (len - i) : 64;
+                uint32_t keystream[16];
+                
+                /* generate keystream */
+                chacha_state s;
+                chacha_state_setup(s, key_32, iv_32, counter + i/64);
+                chacha_block(s);
+                
+                /* fix endianness of keystream */
+                for(j = 0; j < b_len; j+=4){
+                        keystream[j/4] = le32toh(s[j/4]);
+                }
+                
+                /* xor keystream with input */
+                for(j = 0; j < b_len; j++){
+                        output[i+j] = input[i+j] ^ ((unsigned char *)keystream)[j];
+                }
+        }       
 }
